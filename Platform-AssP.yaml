@@ -1,0 +1,882 @@
+openapi: 3.0.0
+info:
+  title: Platform-APIs-AaaP
+  version: 1.0.0
+servers:
+  - url: http://{{client_management_url}}
+  - url: http://{{address_book_url}}
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+tags:
+  - name: Inbound
+  - name: Address Book
+  - name: Address Book > Admin
+paths:
+  /api/v1/inboundsites:
+    get:
+      tags:
+        - Inbound
+      summary: Get Inbound sites
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          example: '20000'
+        - name: filterBy
+          in: query
+          schema:
+            type: string
+          example: accesslevel
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pageInfo:
+                    type: object
+                    properties:
+                      totalCount:
+                        type: integer
+                        example: 16
+                      startCount:
+                        type: integer
+                        example: 1
+                      limit:
+                        type: integer
+                        example: 20000
+                  inboundsites:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        subID:
+                          type: string
+                          example: "0862"
+                        inboundSiteID:
+                          type: string
+                          example: "3YDwb24drOa"
+                        name:
+                          type: string
+                          example: "Bradtke-Bradtke"
+                        parent:
+                          type: string
+                          example: ""
+                        type:
+                          type: string
+                          example: "site"
+                        ancestorlist:
+                          type: array
+                          items: {}
+                          example: []
+                        locationHierarchy:
+                          type: string
+                          example: "Bradtke-Bradtke"
+                        archived:
+                          type: boolean
+                          example: false
+                        status:
+                          type: string
+                          example: "INACTIVE"
+                        insertTimestamp:
+                          type: string
+                          format: date-time
+                          example: "2022-04-29T09:48:58.136Z"
+                        updateTimestamp:
+                          type: string
+                          format: date-time
+                          example: "2022-09-19T11:01:37.044Z"
+                        createdBy:
+                          type: string
+                          example: "00u12b0xmzmb95SY10h8"
+                        updatedBy:
+                          type: string
+                          example: "00u11wyqojqtATQlz0h8"
+                        consType:
+                          type: integer
+                          example: 0
+                        defaultSite:
+                          type: boolean
+                          example: false
+  /api/v1/inboundsiteslistbylocation:
+    post:
+      tags:
+        - Inbound
+      summary: Inbound sites via location ID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                - M0K9QbNMgob
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    subID:
+                      type: string
+                      example: "0862"
+                    inboundSiteID:
+                      type: string
+                      example: "B9Ol8nDqpq1"
+                    name:
+                      type: string
+                      example: "Gandhi Nagar"
+                    parent:
+                      type: string
+                      example: ""
+                    type:
+                      type: string
+                      example: "site"
+                    locationId:
+                      type: string
+                      example: "M0K9QbNMgob"
+                    ancestorlist:
+                      type: array
+                      items: {}
+                      example: []
+                    locationHierarchy:
+                      type: string
+                      example: "Gandhi Nagar"
+                    archived:
+                      type: boolean
+                      example: false
+                    status:
+                      type: string
+                      example: "ACTIVE"
+                    insertTimestamp:
+                      type: string
+                      format: date-time
+                      example: "2024-04-24T13:40:56.317Z"
+                    updateTimestamp:
+                      type: string
+                      format: date-time
+                      example: "2024-04-24T13:40:56.317Z"
+                    createdBy:
+                      type: string
+                      example: "00u12e3jp3y56rgdn0h8"
+                    consType:
+                      type: integer
+                      example: 1
+                    defaultSite:
+                      type: boolean
+                      example: true
+  /api/v1/contact:
+    post:
+      tags:
+        - Address Book > Admin
+      summary: Add New Contact Admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                type: U
+                company: Test
+                name: dd
+                contactType: Recipient
+                internalDelivery: false
+                perosnalID: ID1
+                officeLocationID: AB102
+                notificationAll: true
+                accessibility: true
+                subscriptionId: VA_SUB
+                addresses:
+                  - label: sd
+                    residential: false
+                    addressLine1: ' 27 Waterview Dr2'
+                    city: Shelton
+                    state: CT
+                    postalCode: '11234'
+                    countryCode: US
+                    default: true
+                  - label: Work
+                    residential: false
+                    addressLine1: ' 27 Waterview Dr'
+                    city: Shelton
+                    state: CT
+                    postalCode: '11234'
+                    countryCode: US
+                    verificationState: false
+                    default: true
+                emails:
+                  - label: Home
+                    email: ABC@pb.com
+                    default: true
+                  - label: Work
+                    email: ABC@pb.com
+                    default: true
+                phones:
+                  - label: Home
+                    phone: XXXX1XX
+                    default: true
+                  - label: Work
+                    phone: XXXXXXX
+                    default: true
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{ACCESS_TOKEN}}
+        - name: admin
+          in: query
+          schema:
+            type: integer
+          example: '1'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/contacts:
+    get:
+      tags:
+        - Address Book > Admin
+      summary: Search Address Admin
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/x-www-form-urlencoded
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{ACCESS_TOKEN}}
+        - name: admin
+          in: query
+          schema:
+            type: integer
+          example: '1'
+        - name: sId
+          in: query
+          schema:
+            type: string
+          example: VA_SUB
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/contacts/import:
+    post:
+      tags:
+        - Address Book > Admin
+      summary: Import Admin
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{ACCESS_TOKEN}}
+        - name: type
+          in: query
+          schema:
+            type: string
+          example: S
+        - name: label
+          in: query
+          schema:
+            type: string
+          example: Work
+        - name: admin
+          in: query
+          schema:
+            type: integer
+          example: '1'
+        - name: sId
+          in: query
+          schema:
+            type: string
+          example: VA_SUB
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /api/v1/contact/{contactId}:
+    get:
+      tags:
+        - Address Book
+      summary: GetContactById
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{ACCESS_TOKEN}}
+        - name: contactId
+          in: path
+          schema:
+            type: string
+          required: true
+          example: 66823a1c1c305366f4770124
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "66823a1c1c305366f4770124"
+                  type:
+                    type: string
+                    example: "S"
+                  subscriptionId:
+                    type: string
+                    example: "0862"
+                  locationId:
+                    type: string
+                    example: "M0K9QbNMgob"
+                  divisionId:
+                    type: string
+                    example: "22D56Mnwqgy"
+                  userId:
+                    type: string
+                    example: "00u12e3jp3y56rgdn0h8"
+                  customFields:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        customFieldID:
+                          type: string
+                          example: "9YPzzlnaO5j"
+                        value:
+                          type: string
+                          example: "1"
+                  contactType:
+                    type: string
+                    example: "RECIPIENT"
+                  company:
+                    type: string
+                    example: "Test-suite-2"
+                  name:
+                    type: string
+                    example: "Testing-Agent-2"
+                  departments:
+                    type: array
+                    items:
+                      type: string
+                  addresses:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        label:
+                          type: string
+                          example: "Home 1"
+                        residential:
+                          type: boolean
+                          example: false
+                        addressLine1:
+                          type: string
+                          example: "Civil line"
+                        addressLine2:
+                          type: string
+                          example: "Address-2"
+                        addressLine3:
+                          type: string
+                          example: "Address-3"
+                        city:
+                          type: string
+                          example: "Mumbai"
+                        state:
+                          type: string
+                          example: "MH"
+                        postalCode:
+                          type: string
+                          example: "40001"
+                        countryCode:
+                          type: string
+                          example: "IN"
+                        verificationState:
+                          type: boolean
+                          example: false
+                        verificationStatus:
+                          type: string
+                          example: ""
+                        lastVerifiedDate:
+                          type: string
+                          format: date-time
+                          example: "0001-01-01T00:00:00Z"
+                        default:
+                          type: boolean
+                          example: true
+                  emails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 0
+                        label:
+                          type: string
+                          example: "Home"
+                        default:
+                          type: boolean
+                          example: true
+                  phones:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 0
+                        label:
+                          type: string
+                          example: "Home"
+                        default:
+                          type: boolean
+                          example: true
+                  internalDelivery:
+                    type: boolean
+                    example: false
+                  personalID:
+                    type: string
+                    example: ""
+                  officeLocationID:
+                    type: string
+                    example: ""
+                  notificationAll:
+                    type: boolean
+                    example: false
+                  accessibility:
+                    type: boolean
+                    example: false
+                  mailstopID:
+                    type: string
+                    example: ""
+                  insertTimestamp:
+                    type: string
+                    format: date-time
+                    example: "2024-07-01T05:09:48.293Z"
+                  updateTimestamp:
+                    type: string
+                    format: date-time
+                    example: "0001-01-01T00:00:00Z"
+                  archived:
+                    type: boolean
+                    example: false
+                  private:
+                    type: boolean
+                    example: false
+                  staff:
+                    type: object
+                  smsNotificationEnabled:
+                    type: boolean
+                    example: false
+                  onBehalfUpdatedBy:
+                    type: string
+                    example: ""
+                  replaceType:
+                    type: string
+                    example: ""
+                  consType:
+                    type: integer
+                    example: 1
+                  createdBy:
+                    type: string
+                    example: "00u12e3jp3y56rgdn0h8"
+                  updatedBy:
+                    type: string
+                    example: "00u12e3jp3y56rgdn0h8"
+                  hashKey:
+                    type: string
+                    example: "3b60f15fa2a16d9ce88f48d83bb194a3c122ea881186c76f0de7496d3cba0259"
+    put:
+      tags:
+        - Address Book
+      summary: Update Contact
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                type: Uasd
+                company: Pitney Bowes
+                name: Yashwant GangwarYashwant
+                contactType: Recipient
+                addresses:
+                  - label: Home
+                    residential: false
+                    addressLine1: ' 27 Waterview Dr'
+                    addressLine2: ''
+                    addressLine3: ''
+                    addressLine4: ''
+                    city: Shelton
+                    state: CT
+                    postalCode: '11234'
+                    countryCode: US
+                    default: true
+                  - label: Work
+                    residential: false
+                    addressLine1: ' 27 Waterview Dr'
+                    city: Shelton
+                    state: CT
+                    postalCode: '11234'
+                    countryCode: US
+                    verificationState: false
+                    default: true
+                emails:
+                  - label: Home
+                    email: updated@pb.com
+                    default: true
+                phones:
+                  - label: Home
+                    phone: XXXXXXX
+                    default: true
+      parameters:
+        - name: Content-Type
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{ACCESS_TOKEN}}
+        - name: contactId
+          in: path
+          schema:
+            type: string
+          required: true
+          example: 5eb9bf70d17edbe96f1e301f
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "66823a1c1c305366f4770124"
+                  type:
+                    type: string
+                    example: "S"
+                  subscriptionId:
+                    type: string
+                    example: "0862"
+                  locationId:
+                    type: string
+                    example: "M0K9QbNMgob"
+                  divisionId:
+                    type: string
+                    example: "22D56Mnwqgy"
+                  userId:
+                    type: string
+                    example: "00u12e3jp3y56rgdn0h8"
+                  customFields:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        customFieldID:
+                          type: string
+                          example: "9YPzzlnaO5j"
+                        value:
+                          type: string
+                          example: "1"
+                  contactType:
+                    type: string
+                    example: "RECIPIENT"
+                  company:
+                    type: string
+                    example: "Test-suite-2"
+                  name:
+                    type: string
+                    example: "Testing-Agent-2"
+                  departments:
+                    type: array
+                    items:
+                      type: string
+                  addresses:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        label:
+                          type: string
+                          example: "Home 1"
+                        residential:
+                          type: boolean
+                          example: false
+                        addressLine1:
+                          type: string
+                          example: "Civil line"
+                        addressLine2:
+                          type: string
+                          example: "Address-2"
+                        addressLine3:
+                          type: string
+                          example: "Address-3"
+                        city:
+                          type: string
+                          example: "Mumbai"
+                        state:
+                          type: string
+                          example: "MH"
+                        postalCode:
+                          type: string
+                          example: "40001"
+                        countryCode:
+                          type: string
+                          example: "IN"
+                        verificationState:
+                          type: boolean
+                          example: false
+                        verificationStatus:
+                          type: string
+                          example: ""
+                        lastVerifiedDate:
+                          type: string
+                          format: date-time
+                          example: "0001-01-01T00:00:00Z"
+                        default:
+                          type: boolean
+                          example: true
+                  emails:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 0
+                        label:
+                          type: string
+                          example: "Home"
+                        default:
+                          type: boolean
+                          example: true
+                  phones:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 0
+                        label:
+                          type: string
+                          example: "Home"
+                        default:
+                          type: boolean
+                          example: true
+                  internalDelivery:
+                    type: boolean
+                    example: false
+                  personalID:
+                    type: string
+                    example: ""
+                  officeLocationID:
+                    type: string
+                    example: ""
+                  notificationAll:
+                    type: boolean
+                    example: false
+                  accessibility:
+                    type: boolean
+                    example: false
+                  mailstopID:
+                    type: string
+                    example: ""
+                  insertTimestamp:
+                    type: string
+                    format: date-time
+                    example: "2024-07-01T05:09:48.293Z"
+                  updateTimestamp:
+                    type: string
+                    format: date-time
+                    example: "0001-01-01T00:00:00Z"
+                  archived:
+                    type: boolean
+                    example: false
+                  private:
+                    type: boolean
+                    example: false
+                  staff:
+                    type: object
+                  smsNotificationEnabled:
+                    type: boolean
+                    example: false
+                  onBehalfUpdatedBy:
+                    type: string
+                    example: ""
+                  replaceType:
+                    type: string
+                    example: ""
+                  consType:
+                    type: integer
+                    example: 1
+                  createdBy:
+                    type: string
+                    example: "00u12e3jp3y56rgdn0h8"
+                  updatedBy:
+                    type: string
+                    example: "00u12e3jp3y56rgdn0h8"
+                  hashKey:
+                    type: string
+                    example: "3b60f15fa2a16d9ce88f48d83bb194a3c122ea881186c76f0de7496d3cba0259"
+  /api/v2/contact:
+    post:
+      tags:
+        - Address Book
+      summary: Add New Contact
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                id: null
+                contactType: RECIPIENT
+                internalDelivery: false
+                type: S
+                name: Testing-Agent-2
+                company: Test-suite-2
+                emails:
+                  - default: true
+                    email: null
+                    id: null
+                    label: Home
+                phones:
+                  - default: true
+                    id: null
+                    label: Home
+                    phone: null
+                personalID: ''
+                officeLocationID: null
+                mailstopID: null
+                additionalEmailIds: null
+                primaryLocation: null
+                accessibility: null
+                notificationAll: null
+                smsNotificationEnabled: null
+                addresses:
+                  - addressLine1: Civil line
+                    addressLine2: Address-2
+                    addressLine3: Address-3
+                    addressLine4: null
+                    city: Mumbai
+                    countryCode: IN
+                    default: true
+                    id: null
+                    label: Home 1
+                    postalCode: '40001'
+                    residential: false
+                    state: MH
+                divisionId: null
+                locationId: null
+                identificationFields: null
+                departments:
+                  - ''
+                customFields:
+                  - customFieldID: 9YPzzlnaO5j
+                    value: '1'
+                recipient: true
+                sender: false
+                return_address: false
+                receivingAccessLevel: S
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+             schema:
+                type: string
+                example: "66823a1c1c305366f4770124"
+  /api/v1/contact/delete:
+    patch:
+      tags:
+        - Address Book
+      summary: Deletecontact
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                - 5ebbcde316d408327243a4a8
+      parameters:
+        - name: Authorization
+          in: header
+          schema:
+            type: string
+          example: Bearer {{ACCESS_TOKEN}}
+        - name: ssto
+          in: query
+          schema:
+            type: boolean
+          example: 'true'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deletedRecords:
+                    type: integer
+                    example: 1
+                  failedRecords:
+                    type: integer
+                    example: 0
+                  referredRecords:
+                    type: integer
+                    example: 0
+                  references:
+                    type: object
+                    example: {}
